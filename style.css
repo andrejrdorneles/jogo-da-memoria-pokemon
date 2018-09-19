@@ -1,0 +1,18 @@
+html, body{
+    height: 99%;
+}
+
+.container{
+    display: flex;
+    justify-content: space-around;
+    align-items: space-around;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 100%;
+}
+
+.carta{
+    width: 11%;
+    border: 3px solid red;
+    margin: 5px 0;
+}
