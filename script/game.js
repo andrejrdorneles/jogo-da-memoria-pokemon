@@ -1,4 +1,4 @@
-const pokemons = [
+const pokemons = shuffle([
     {
         "nome": "arbok",
         "imagem": "./images/arbok.jpg"
@@ -127,12 +127,63 @@ const pokemons = [
         "nome": "zubat",
         "imagem": "./images/zubat.jpg"
     }
-]
+])
+
+let firstCard = undefined
+let secondCard = undefined
 
 function loadCards() {
     const container = $("#container")
 
-    pokemons.forEach((pokemon) => {
-        container.append(`<div class="carta"></div>`)
+    pokemons.forEach((pokemon, key) => {
+        pokemon.id = key
+        container.append(`<div id="${pokemon.id}" class="carta" data-nome="${pokemon.nome}" onClick="displayCard(event, ${key})"></div>`)
     })
 }
+
+function displayCard(event, key) {
+    debugger
+    const div = $(`#${event.target.id}`)
+    const pokemon = pokemons.find(pokemon => {
+        return pokemon.id === key
+    })
+    
+    if(!firstCard) {
+        firstCard = pokemon
+        div.css("background-image", `url(${pokemon.imagem})`)
+    } else if(!secondCard) {
+        secondCard = pokemon
+        div.css("background-image", `url(${pokemon.imagem})`)
+        compareSelectedCards()
+    } 
+}
+
+function compareSelectedCards() {
+    if(firstCard.nome === secondCard.nome) {
+        firstCard = undefined
+        secondCard = undefined
+    } else {
+        const firstSelectedDiv = $(`#${firstCard.id}`)
+        const secondSelectedDiv = $(`#${secondCard.id}`)
+
+        setTimeout(() => {
+            firstSelectedDiv.css("background-image", "url('./images/background.jpg')")
+            secondSelectedDiv.css("background-image", "url('./images/background.jpg')")
+            firstCard = undefined
+            secondCard = undefined
+        }, 1000)  
+    }
+}
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
