@@ -129,10 +129,4 @@ const pokemons = [
     }
 ]
 
-function loadCards() {
-    const container = $("#container")
-
-    pokemons.forEach((pokemon) => {
-        container.append(`<div class="carta"></div>`)
-    })
-}
+export default pokemons
