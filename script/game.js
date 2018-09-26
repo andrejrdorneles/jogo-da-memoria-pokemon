@@ -149,6 +149,7 @@ function restartGame(){
     $("#container").empty()
     pokemons = shuffle(pokemons)
     loadCards()
+    setSelectedCardsToUndefined()
 }
 
 function setSelectedCardsToUndefined(){
