@@ -1,4 +1,4 @@
-const pokemons = shuffle([
+let pokemons = shuffle([
     {
         "nome": "arbok",
         "imagem": "./images/arbok.jpg"
@@ -131,18 +131,32 @@ const pokemons = shuffle([
 
 let firstCard = undefined
 let secondCard = undefined
+let matches = 0
+const maxMatches = pokemons.length / 2
 
 function loadCards() {
     const container = $("#container")
 
     pokemons.forEach((pokemon, key) => {
         pokemon.id = key
-        container.append(`<div id="${pokemon.id}" class="carta" data-nome="${pokemon.nome}" onClick="displayCard(event, ${key})"></div>`)
+        container.append(`<div id="${pokemon.id}" class="card" onClick="displayCard(event, ${key})"></div>`)
     })
 }
 
+function restartGame(){
+    alert('O jogo está sendo reiniciado...')
+    matches = 0
+    $("#container").empty()
+    pokemons = shuffle(pokemons)
+    loadCards()
+}
+
+function setSelectedCardsToUndefined(){
+    firstCard = undefined
+    secondCard = undefined
+}
+
 function displayCard(event, key) {
-    debugger
     const div = $(`#${event.target.id}`)
     const pokemon = pokemons.find(pokemon => {
         return pokemon.id === key
@@ -151,7 +165,7 @@ function displayCard(event, key) {
     if(!firstCard) {
         firstCard = pokemon
         div.css("background-image", `url(${pokemon.imagem})`)
-    } else if(!secondCard) {
+    } else if(!secondCard  && (firstCard.id !== pokemon.id)) {
         secondCard = pokemon
         div.css("background-image", `url(${pokemon.imagem})`)
         compareSelectedCards()
@@ -159,19 +173,26 @@ function displayCard(event, key) {
 }
 
 function compareSelectedCards() {
+    const firstSelectedDiv = $(`#${firstCard.id}`)
+    const secondSelectedDiv = $(`#${secondCard.id}`)
     if(firstCard.nome === secondCard.nome) {
-        firstCard = undefined
-        secondCard = undefined
+        firstSelectedDiv.append('<img src="./images/gotcha.svg" alt="">')
+        secondSelectedDiv.append('<img src="./images/gotcha.svg" alt="">')
+        setSelectedCardsToUndefined()
+        matches++
     } else {
-        const firstSelectedDiv = $(`#${firstCard.id}`)
-        const secondSelectedDiv = $(`#${secondCard.id}`)
-
         setTimeout(() => {
             firstSelectedDiv.css("background-image", "url('./images/background.jpg')")
             secondSelectedDiv.css("background-image", "url('./images/background.jpg')")
-            firstCard = undefined
-            secondCard = undefined
-        }, 1000)  
+            setSelectedCardsToUndefined()
+        }, 1000)
+    }
+    
+    if(matches == maxMatches){
+        setTimeout(() => {
+            alert('Parabéns, você completou o jogo!!!')
+            restartGame()
+        }, 500)
     }
 }
 
