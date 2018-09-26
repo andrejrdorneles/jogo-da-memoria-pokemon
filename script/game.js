@@ -139,6 +139,7 @@ function loadCards() {
 
     pokemons.forEach((pokemon, key) => {
         pokemon.id = key
+        pokemon.macth = false
         container.append(`<div id="${pokemon.id}" class="card" onClick="displayCard(event, ${key})"></div>`)
     })
 }
@@ -163,6 +164,10 @@ function displayCard(event, key) {
         return pokemon.id === key
     })
     
+    if(pokemon.macth){
+        return
+    }    
+    
     if(!firstCard) {
         firstCard = pokemon
         div.css("background-image", `url(${pokemon.imagem})`)
@@ -177,6 +182,8 @@ function compareSelectedCards() {
     const firstSelectedDiv = $(`#${firstCard.id}`)
     const secondSelectedDiv = $(`#${secondCard.id}`)
     if(firstCard.nome === secondCard.nome) {
+        firstCard.macth = true
+        secondCard.macth = true
         firstSelectedDiv.append('<img src="./images/gotcha.svg" alt="">')
         secondSelectedDiv.append('<img src="./images/gotcha.svg" alt="">')
         setSelectedCardsToUndefined()
